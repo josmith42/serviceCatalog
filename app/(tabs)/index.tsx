@@ -1,15 +1,23 @@
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import { FlatList } from 'react-native-gesture-handler';
+import { PieceView } from '../components/PieceView';
+import { Piece } from '../types/Piece';
+
+export const mockData: Piece[] = [
+  { title: "Offertoire", composer: "Louis Raffy" },
+  { title: "Prelude in F major", composer: "J.S. Bach" },
+  { title: "Praeludium", composer: "Hermann Schroeder" },
+];
 
 export default function TabOneScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
+    <FlatList
+      data={mockData}
+      renderItem={({ item }) => (
+        <PieceView piece={item} />
+      )}
+    />
   );
 }
 
