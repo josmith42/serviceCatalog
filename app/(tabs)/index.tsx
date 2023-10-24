@@ -2,18 +2,14 @@ import { StyleSheet } from 'react-native';
 
 import { FlatList } from 'react-native-gesture-handler';
 import { PieceView } from '../components/PieceView';
-import { Piece } from '../types/Piece';
-
-export const mockData: Piece[] = [
-  { title: "Offertoire", composer: "Louis Raffy" },
-  { title: "Prelude in F major", composer: "J.S. Bach" },
-  { title: "Praeludium", composer: "Hermann Schroeder" },
-];
+import { useAppSelector } from '../hooks';
+import { selectCatalog } from '../../features/catalog/catalogSlice';
 
 export default function TabOneScreen() {
+  const catalog = useAppSelector(selectCatalog)
   return (
     <FlatList
-      data={mockData}
+      data={catalog.value}
       renderItem={({ item }) => (
         <PieceView piece={item} />
       )}
