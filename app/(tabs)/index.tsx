@@ -2,10 +2,15 @@ import { StyleSheet } from 'react-native';
 
 import { FlatList } from 'react-native-gesture-handler';
 import { PieceView } from '../components/PieceView';
-import { useAppSelector } from '../hooks';
-import { selectCatalog } from '../../features/catalog/catalogSlice';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { fetchPiecesThunk, selectCatalog } from '../../features/catalog/catalogSlice';
+import { useEffect } from 'react';
 
 export default function TabOneScreen() {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(fetchPiecesThunk())
+  }, [])
   const catalog = useAppSelector(selectCatalog)
   return (
     <FlatList

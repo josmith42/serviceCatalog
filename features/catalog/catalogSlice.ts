@@ -1,25 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { Piece } from "../../app/types/Piece";
+import { fetchPieces } from "../../app/api/pieceApi";
 
 export interface CatalogState {
     value: Piece[]
+    status: "idle" | "loading" | "error"
 }
-
-export const mockData: Piece[] = [
-  { title: "Offertoire", composer: "Louis Raffy" },
-  { title: "Prelude in F major", composer: "J.S. Bach" },
-  { title: "Praeludium", composer: "Hermann Schroeder" },
-];
 
 const initialState: CatalogState = {
-    value: mockData
+    value: [],
+    status: "loading"
 }
+
+export const fetchPiecesThunk = createAsyncThunk(
+    "catalog/fetchPieces",
+    async () => {
+        const response = await fetchPieces()
+        return response
+    }
+)
 
 export const catalogSlice = createSlice({
     name: "catalog",
     initialState,
-    reducers: {
+    reducers: { },
+    extraReducers: (builder) => {
+        builder.addCase(fetchPiecesThunk.pending, (state) => {
+            state.status = "loading"
+        })
+        .addCase(fetchPiecesThunk.fulfilled, (state, action) => {
+            state.status = "idle"
+            state.value = action.payload
+        })
+        .addCase(fetchPiecesThunk.rejected, (state) => {
+            state.status = "error"
+        })
     }
 })
 
