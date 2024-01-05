@@ -14,7 +14,7 @@ export const PieceView = (props: PieceViewData) => {
   return (
     <TouchableOpacity onPress={handleClick} style={{ margin: 4, borderWidth: 1, borderColor: 'gray', borderRadius: 5, padding: 4 }}>
         <Text>{props.piece.title}</Text>
-        <Text>{props.piece.composer}</Text>
-    </TouchableOpacity >
+        <Text>{props.piece.composer_id}</Text>
+    </TouchableOpacity>
   );
 };
