@@ -6,6 +6,8 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 export async function fetchPieces(): Promise<Piece[]> {
-    const response = await supabase.from('pieces').select('*')
+    const response = await supabase
+        .from('pieces')
+        .select('id, title, composers!inner(name)')
     return response.data as Piece[]
 }
