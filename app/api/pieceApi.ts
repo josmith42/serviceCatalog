@@ -1,3 +1,4 @@
+import 'react-native-url-polyfill/auto'
 import { createClient } from "@supabase/supabase-js"
 import { Piece } from "../types/Piece"
 
@@ -10,4 +11,4 @@ export async function fetchPieces(): Promise<Piece[]> {
         .from('pieces')
         .select('id, title, composers!inner(name)')
     return response.data as Piece[]
-}
+    }
