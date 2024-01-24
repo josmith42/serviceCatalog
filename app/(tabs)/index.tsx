@@ -5,6 +5,7 @@ import { PieceView } from '../components/PieceView';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { fetchPiecesThunk, selectCatalog } from '../../features/catalog/catalogSlice';
 import { useEffect } from 'react';
+import React from 'react';
 
 export default function TabOneScreen() {
   const dispatch = useAppDispatch()
