@@ -20,6 +20,8 @@ export async function fetchPieces(): Promise<Piece[]> {
 
 function generateFakePieces(): Promise<Piece[]> {
     return Promise.resolve([
-        { id: 1, title: "Prelude in C Major", composers: { name: "J.S. Bach"} }
+        { id: 1, title: "Prelude in C Major", composers: { name: "J.S. Bach"} },
+        { id: 2, title: "Offertoire", composers: { name: "Louis Raffy" } },
+        { id: 3, title: "Recessional", composers: { name: "Douglas E. Wagner"}}
     ])
 }

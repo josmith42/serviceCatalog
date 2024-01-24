@@ -1,8 +1,9 @@
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Text } from '../../components/Themed';
+import { Text, View } from '../../components/Themed';
 import { Piece } from '../types/Piece';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, useColorScheme } from 'react-native';
+import Colors from '../../constants/Colors';
 
 export interface PieceViewData {
   piece: Piece;
@@ -14,14 +15,29 @@ const handleClick = () => {
 
 export const PieceView = (props: PieceViewData) => {
   return (
-    <TouchableOpacity onPress={handleClick} style={{ margin: 4, borderWidth: 1, borderColor: 'gray', borderRadius: 5, padding: 4 }}>
-        <Text style={styles.title}>{props.piece.title}</Text>
-        <Text lightColor='rgba(64, 64, 64, 0.8)' darkColor='rgba(192, 192, 192, 0.8)'>{props.piece.composers.name}</Text>
-    </TouchableOpacity>
+    <View style={styles.container}>
+      <Pressable
+        onPress={handleClick}
+        style={styles.pieceView}
+        android_ripple={{
+          color: Colors[useColorScheme() ?? 'light'].selection,
+        }}>
+          <Text style={styles.title}>{props.piece.title}</Text>
+          <Text lightColor='rgba(64, 64, 64, 0.8)' darkColor='rgba(192, 192, 192, 0.8)'>{props.piece.composers.name}</Text>
+      </Pressable>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  pieceView: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  container: {
+    borderRadius: 8,
+    overflow: 'hidden'
+  },
   title: {
     fontSize: 15,
   }

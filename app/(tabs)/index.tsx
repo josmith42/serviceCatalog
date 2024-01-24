@@ -15,6 +15,7 @@ export default function TabOneScreen() {
   const catalog = useAppSelector(selectCatalog)
   return (
     <FlatList
+      style={styles.container}
       data={catalog.value}
       renderItem={({ item }) => (
         <PieceView piece={item} />
@@ -25,9 +26,7 @@ export default function TabOneScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginVertical: 8,
   },
   title: {
     fontSize: 20,
