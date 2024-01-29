@@ -7,6 +7,8 @@ import { Text as DefaultText, useColorScheme, View as DefaultView } from 'react-
 
 import Colors from '../constants/Colors';
 import React from 'react';
+import { adaptNavigationTheme, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
+import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme, ThemeProvider } from '@react-navigation/native';
 
 type ThemeProps = {
   lightColor?: string;
@@ -42,4 +44,30 @@ export function View(props: ViewProps) {
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+const { LightTheme, DarkTheme } = adaptNavigationTheme({
+  reactNavigationLight: NavigationDefaultTheme,
+  reactNavigationDark: NavigationDarkTheme,
+})
+
+const AppDefaultTheme = {
+  ...MD3LightTheme,
+  ...LightTheme,
+  colors: {
+    ...MD3LightTheme.colors,
+    ...LightTheme.colors,
+  },
+};
+const AppDarkTheme = {
+  ...MD3DarkTheme,
+  ...DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    ...DarkTheme.colors,
+  },
+};
+
+export function useAppTheme() {
+  return useColorScheme() === 'dark' ? AppDarkTheme : AppDefaultTheme
 }
