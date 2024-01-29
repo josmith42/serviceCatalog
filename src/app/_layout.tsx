@@ -4,10 +4,10 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { store } from '../redux/store';
 import React from 'react';
 import { PaperProvider } from 'react-native-paper';
-import { useAppTheme } from '../components/Themed';
+import { useAppTheme } from './components/Themed';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -24,7 +24,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
 

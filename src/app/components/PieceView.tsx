@@ -1,6 +1,6 @@
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Text, View } from '../../components/Themed';
-import { Piece } from '../types/Piece';
+import { Text, View } from './Themed';
+import { Piece } from '../../api/dto/Piece';
 import React from 'react';
 import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 import Colors from '../../constants/Colors';

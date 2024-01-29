@@ -1,6 +1,6 @@
 import 'react-native-url-polyfill/auto'
 import { createClient } from "@supabase/supabase-js"
-import { Piece } from "../types/Piece"
+import { Piece } from "./dto/Piece"
 import { DATA_SOURCE } from '../featureFlags'
 
 const supabaseUrl = "http://localhost:54321"

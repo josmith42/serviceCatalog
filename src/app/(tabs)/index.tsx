@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { FlatList } from 'react-native-gesture-handler';
 import { PieceView } from '../components/PieceView';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchPiecesThunk, selectCatalog } from '../../features/catalog/catalogSlice';
 import { useEffect } from 'react';
 import React from 'react';

@@ -5,7 +5,7 @@
 
 import { Text as DefaultText, useColorScheme, View as DefaultView } from 'react-native';
 
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 import React from 'react';
 import { adaptNavigationTheme, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme, ThemeProvider } from '@react-navigation/native';

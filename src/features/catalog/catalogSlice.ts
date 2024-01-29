@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import { Piece } from "../../app/types/Piece";
-import { fetchPieces } from "../../app/api/pieceApi";
+import { RootState } from "../../redux/store";
+import { Piece } from "../../api/dto/Piece";
+import { fetchPieces } from "../../api/pieceApi";
 
 export interface CatalogState {
     value: Piece[]
