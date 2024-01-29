@@ -4,6 +4,7 @@ import { Piece } from '../types/Piece';
 import React from 'react';
 import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 import Colors from '../../constants/Colors';
+import { useTheme } from '@react-navigation/native';
 
 export interface PieceViewData {
   piece: Piece;
@@ -14,6 +15,22 @@ const handleClick = () => {
 }
 
 export const PieceView = (props: PieceViewData) => {
+  const theme = useTheme()
+  const styles = StyleSheet.create({
+    pieceView: {
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+    },
+    container: {
+      borderRadius: 8,
+      overflow: 'hidden',
+      backgroundColor: theme.colors.background
+    },
+    title: {
+      fontSize: 15,
+    }
+  })
+
   return (
     <View style={styles.container}>
       <Pressable
@@ -28,17 +45,3 @@ export const PieceView = (props: PieceViewData) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  pieceView: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  container: {
-    borderRadius: 8,
-    overflow: 'hidden'
-  },
-  title: {
-    fontSize: 15,
-  }
-})
