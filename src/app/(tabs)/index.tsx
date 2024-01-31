@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { FlatList } from 'react-native-gesture-handler';
 import { PieceView } from '../components/PieceView';
@@ -6,8 +6,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchPiecesThunk, selectCatalog } from '../../features/catalog/catalogSlice';
 import { useEffect } from 'react';
 import React from 'react';
-import { ActivityIndicator } from 'react-native-paper';
 import { Text } from 'react-native-paper'
+import LoadingIndicator from '../components/Loading';
 
 export default function SelectionsScreen() {
   const dispatch = useAppDispatch()
@@ -18,7 +18,7 @@ export default function SelectionsScreen() {
   
   switch(catalog.status) {
     case "loading":
-      return (<ActivityIndicator animating={true} />)
+      return (<LoadingIndicator />)
     case "idle":
       return (<FlatList
         style={styles.container}

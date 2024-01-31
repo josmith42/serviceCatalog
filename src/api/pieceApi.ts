@@ -21,10 +21,13 @@ export async function fetchPieces(): Promise<Piece[]> {
     return data as unknown as Piece[]
 }
 
-function generateFakePieces(): Promise<Piece[]> {
-    return Promise.resolve([
+async function generateFakePieces(): Promise<Piece[]> {
+    // Uncomment to inject delay in loading
+    // await new Promise(resolve => setTimeout(resolve, 2000))
+    return [
         { id: 1, title: "Prelude in C Major", composers: { name: "J.S. Bach"} },
         { id: 2, title: "Offertoire", composers: { name: "Louis Raffy" } },
-        { id: 3, title: "Recessional", composers: { name: "Douglas E. Wagner"}}
-    ])
+        { id: 3, title: "Recessional", composers: { name: "Douglas E. Wagner"} },
+        { id: 4, title: "Fugue in G minor", composers: { name: "J.S. Bach"} }
+    ]
 }
