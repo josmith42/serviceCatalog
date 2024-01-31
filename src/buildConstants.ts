@@ -18,8 +18,8 @@ export const DATA_SOURCE: DataSource = (Constants.expoConfig?.extra?.DATA_SOURCE
 
 // Default to localhost if URL isn't in app.config.js, or on android, the special
 // IP address for emulators that forwards the traffic to the host machine.
-export const SUPABASE_URL: string = (Constants.expoConfig?.extra?.SUPABASE_URL) ||
-    Platform.OS === 'android' ? "http://10.0.2.2:54321" : "http://localhost:54321"
+export const SUPABASE_URL: string = Constants.expoConfig?.extra?.SUPABASE_URL ||
+    (Platform.OS === 'android' ? "http://10.0.2.2:54321" : "http://localhost:54321")
 
 // Default to debug key for supabase
 export const SUPABASE_KEY: string = (Constants.expoConfig?.extra?.SUPABASE_KEY) ||

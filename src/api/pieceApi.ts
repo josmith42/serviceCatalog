@@ -7,14 +7,18 @@ import { Platform } from 'react-native'
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 export async function fetchPieces(): Promise<Piece[]> {
+    console.log(`${Platform.OS} | fetchPieces() - supabase URL: ${SUPABASE_URL}`)
     if (DATA_SOURCE == "mock") {
         return generateFakePieces()
     }
 
-    const response = await supabase
+    const { data, error } = await supabase
         .from('pieces')
         .select('id, title, composers!inner(name)')
-        return response.data as unknown as Piece[]
+    if (error) {
+        return Promise.reject("error")
+    }
+    return data as unknown as Piece[]
 }
 
 function generateFakePieces(): Promise<Piece[]> {
