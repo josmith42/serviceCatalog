@@ -1,4 +1,3 @@
-import { View } from './Themed';
 import { Piece } from '../../api/dto/Piece';
 import React from 'react';
 import { StyleSheet } from 'react-native';
@@ -24,11 +23,9 @@ export const PieceView = (props: PieceViewData) => {
   })
 
   return (
-    <View style={styles.container}>
-      <List.Item
-        title={props.piece.title}
-        description={props.piece.composers.name}
-        onPress={handleClick} />
-    </View>
+    <List.Item style={styles.container}
+      title={props.piece.title}
+      description={props.piece.composers.name}
+      onPress={handleClick} />
   );
 };

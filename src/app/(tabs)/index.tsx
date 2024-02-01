@@ -6,8 +6,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchPiecesThunk, selectCatalog } from '../../features/catalog/catalogSlice';
 import { useEffect } from 'react';
 import React from 'react';
-import { Text } from 'react-native-paper'
-import LoadingIndicator from '../components/Loading';
+import LoadingScreen from '../components/LoadingScreen';
+import { ErrorScreen } from '../components/ErrorScreen';
 
 export default function SelectionsScreen() {
   const dispatch = useAppDispatch()
@@ -18,7 +18,7 @@ export default function SelectionsScreen() {
   
   switch(catalog.status) {
     case "loading":
-      return (<LoadingIndicator />)
+      return (<LoadingScreen />)
     case "idle":
       return (<FlatList
         style={styles.container}
@@ -29,7 +29,10 @@ export default function SelectionsScreen() {
       />)
     case "error":
       return (
-        <Text>Error</Text>
+        <ErrorScreen
+          message={'There was an error fetching data from the server'}
+          details={catalog.error}
+        />
       )
   }
 }

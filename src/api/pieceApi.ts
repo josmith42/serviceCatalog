@@ -16,7 +16,7 @@ export async function fetchPieces(): Promise<Piece[]> {
         .from('pieces')
         .select('id, title, composers!inner(name)')
     if (error) {
-        return Promise.reject("error")
+        return Promise.reject(error.message)
     }
     return data as unknown as Piece[]
 }
@@ -24,6 +24,9 @@ export async function fetchPieces(): Promise<Piece[]> {
 async function generateFakePieces(): Promise<Piece[]> {
     // Uncomment to inject delay in loading
     // await new Promise(resolve => setTimeout(resolve, 2000))
+
+    // Uncomment to inject an error
+    // return Promise.reject("This is an error message")
     return [
         { id: 1, title: "Prelude in C Major", composers: { name: "J.S. Bach"} },
         { id: 2, title: "Offertoire", composers: { name: "Louis Raffy" } },

@@ -1,7 +1,7 @@
 import { ActivityIndicator, Text } from "react-native-paper"
 import { StyleSheet, View } from 'react-native';
 
-export default function LoadingIndicator() {
+export default function LoadingScreen() {
     return (
         <View style={styles.container}>
             <ActivityIndicator animating={true} size={'large'} />
