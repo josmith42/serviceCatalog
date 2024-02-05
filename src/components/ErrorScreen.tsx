@@ -1,5 +1,4 @@
-import { StyleSheet } from 'react-native';
-import { View } from './Themed';
+import { StyleSheet, View } from 'react-native';
 import { Icon, Text, useTheme } from 'react-native-paper'
 
 interface ErrorScreenProps {

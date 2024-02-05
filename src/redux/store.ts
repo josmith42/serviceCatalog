@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import catalogReducer from "../features/catalog/catalogSlice"
+import catalogReducer from "./catalogSlice"
 
 export const store = configureStore({
   reducer: {

@@ -1,7 +1,7 @@
-import { Piece } from '../../api/dto/Piece';
+import { Piece } from '../api/dto/Piece';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+// import { useTheme } from '@react-navigation/native';
 import { List } from 'react-native-paper';
 
 export interface PieceViewData {
@@ -13,12 +13,12 @@ const handleClick = () => {
 }
 
 export const PieceView = (props: PieceViewData) => {
-  const theme = useTheme()
+//   const theme = useTheme()
   const styles = StyleSheet.create({
     container: {
       borderRadius: 8,
       overflow: 'hidden',
-      backgroundColor: theme.colors.background
+    //   backgroundColor: theme.colors.background
     },
   })
 

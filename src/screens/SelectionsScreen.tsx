@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList } from 'react-native';
 import { PieceView } from '../components/PieceView';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { fetchPiecesThunk, selectCatalog } from '../../features/catalog/catalogSlice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { fetchPiecesThunk, selectCatalog } from '../redux/catalogSlice';
 import { useEffect } from 'react';
 import React from 'react';
 import LoadingScreen from '../components/LoadingScreen';
