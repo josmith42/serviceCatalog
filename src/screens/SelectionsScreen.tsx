@@ -21,7 +21,6 @@ export default function SelectionsScreen() {
       return (<LoadingScreen />)
     case "idle":
       return (<FlatList
-        style={styles.container}
         data={catalog.value}
         renderItem={({ item }) => (
           <PieceView piece={item} />
@@ -38,9 +37,6 @@ export default function SelectionsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 8,
-  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
