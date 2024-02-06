@@ -3,8 +3,9 @@ import { createClient } from "@supabase/supabase-js"
 import { DATA_SOURCE, SUPABASE_KEY, SUPABASE_URL } from '../buildConstants'
 import { Platform } from 'react-native'
 import { Piece } from '../model/Piece'
+import { Database } from './dto/supabase'
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_KEY)
 
 export async function fetchPieces(): Promise<Piece[]> {
     console.log(`${Platform.OS} | fetchPieces() - supabase URL: ${SUPABASE_URL}`)
@@ -18,11 +19,11 @@ export async function fetchPieces(): Promise<Piece[]> {
     if (error) {
         return Promise.reject(error.message)
     }
-    return data.map((piece: any) => {
+    return data.map((piece: { id: number, title: string, composers: { name: string } | null }) => {
         return {
             id: piece.id,
             title: piece.title,
-            composer: piece.composers.name
+            composer: piece.composers?.name ?? ""
         }
     })
 }
