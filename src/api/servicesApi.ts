@@ -1,37 +1,50 @@
+import { QueryData } from "@supabase/supabase-js"
 import { DATA_SOURCE } from "../buildConstants"
 import { Service } from "../model/Service"
 import { supabaseClient } from "./supabaseClient"
+
+type NoArray<T> = T extends Array<infer U> ? U : T;
 
 export async function fetchServices(): Promise<Service[]> {
     if (DATA_SOURCE == "mock") {
         return generateFakeServices()
     }
-    const {data, error } = await supabaseClient
+    const servicesQuery = supabaseClient
         .from('services')
         .select(
             `
             id,
             date,
             service_selections (
-                genres!inner(name)
+                genres!inner(name),
+                selections!inner(id, title, composers!inner(name))
             )
             `
         )
+        .order('date', { ascending: false })
+
+    type ServiceQueryResult = QueryData<typeof servicesQuery>
+    type ServiceDto = NoArray<ServiceQueryResult>;
+    type ServiceSelectionDto = NoArray<ServiceDto['service_selections']>;
+
+    const { data, error } = await servicesQuery
     if (error) {
         return Promise.reject(error.message)
     }
-    console.log(data)
-    return data.map((service: { id: number, date: string, service_selections: any }) => {
+    const services: ServiceQueryResult = data
+    console.log(services)
+
+    return services.map((service: ServiceDto) => {
         return {
             id: service.id,
             date: service.date,
-            selections: service.service_selections.map((selection: { genres: { name: string } }) => {
+            selections: service.service_selections.map((selection: ServiceSelectionDto) => {
                 return {
-                    genre: selection.genres.name,
+                    genre: selection?.genres?.name ?? "",
                     selection: {
-                        id: 0,
-                        title: "",
-                        composer: "",
+                        id: selection?.selections?.id ?? 0,
+                        title: selection?.selections?.title ?? "",
+                        composer: selection?.selections?.composers?.name ?? ""
                     }
                 }
             })
