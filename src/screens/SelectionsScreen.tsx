@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { FlatList } from 'react-native';
 import { SelectionView } from '../components/SelectionView';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchSelectionsThunk, selectCatalog } from '../redux/catalogSlice';
+import { fetchSelectionsThunk, selectSelections } from '../redux/selectionsSlice';
 import { useEffect } from 'react';
 import React from 'react';
 import LoadingScreen from '../components/LoadingScreen';
@@ -14,14 +14,14 @@ export default function SelectionsScreen() {
   useEffect(() => {
     dispatch(fetchSelectionsThunk())
   }, [])
-  const catalog = useAppSelector(selectCatalog)
+  const selections = useAppSelector(selectSelections)
   
-  switch(catalog.status) {
+  switch(selections.viewState.status) {
     case "loading":
       return (<LoadingScreen />)
     case "idle":
       return (<FlatList
-        data={catalog.value}
+        data={selections.viewState.value}
         renderItem={({ item }) => (
           <SelectionView selection={item} />
         )}
@@ -30,7 +30,7 @@ export default function SelectionsScreen() {
       return (
         <ErrorScreen
           message={'There was an error fetching data from the server'}
-          details={catalog.error}
+          details={selections.viewState.message}
         />
       )
   }

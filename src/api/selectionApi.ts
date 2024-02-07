@@ -1,11 +1,8 @@
 import 'react-native-url-polyfill/auto'
-import { createClient } from "@supabase/supabase-js"
-import { DATA_SOURCE, SUPABASE_KEY, SUPABASE_URL } from '../buildConstants'
+import { DATA_SOURCE, SUPABASE_URL } from '../buildConstants'
 import { Platform } from 'react-native'
 import { Selection } from '../model/Selection'
-import { Database } from './dto/supabase'
-
-const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_KEY)
+import { supabaseClient } from './supabaseClient'
 
 export async function fetchSelections(): Promise<Selection[]> {
     console.log(`${Platform.OS} | fetchSelections() - supabase URL: ${SUPABASE_URL}`)
@@ -13,7 +10,7 @@ export async function fetchSelections(): Promise<Selection[]> {
         return generateFakeSelections()
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('selections')
         .select('id, title, composers!inner(name)')
     if (error) {

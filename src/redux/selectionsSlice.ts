@@ -2,46 +2,35 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchSelections } from "../api/selectionApi";
 import { RootState } from "./store";
 import { Selection } from "../model/Selection";
+import { ViewStateContainer } from "./ViewState";
 
-export interface CatalogState {
-    value: Selection[],
-    error: string | undefined,
-    status: "idle" | "loading" | "error"
-}
-
-const initialState: CatalogState = {
-    value: [],
-    error: undefined,
-    status: "loading"
-}
+const initialState: ViewStateContainer<Selection[]> = { viewState: { status: "loading" } }
 
 export const fetchSelectionsThunk = createAsyncThunk(
-    "catalog/fetchCatalog",
+    "catalog/fetchSelections",
     async () => {
         const response = await fetchSelections()
         return response
     }
 )
 
-export const catalogSlice = createSlice({
-    name: "catalog",
+export const selectionsSlice = createSlice({
+    name: "selections",
     initialState,
     reducers: { },
     extraReducers: (builder) => {
         builder.addCase(fetchSelectionsThunk.pending, (state) => {
-            state.status = "loading"
+            state.viewState = { status: "loading" }
         })
         .addCase(fetchSelectionsThunk.fulfilled, (state, action) => {
-            state.status = "idle"
-            state.value = action.payload
+            state.viewState = { status: "idle", value: action.payload }
         })
         .addCase(fetchSelectionsThunk.rejected, (state, action) => {
-            state.status = "error"
-            state.error = action.error.message
+            state.viewState = { status: "error", message: action.error.message ?? "" }
         })
     }
 })
 
-export const selectCatalog = (state: RootState) => state.catalog
+export const selectSelections = (state: RootState) => state.selections
 
-export default catalogSlice.reducer
+export default selectionsSlice.reducer
