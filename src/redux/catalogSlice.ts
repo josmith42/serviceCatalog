@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchPieces } from "../api/pieceApi";
+import { fetchSelections } from "../api/selectionApi";
 import { RootState } from "./store";
-import { Piece } from "../model/Piece";
+import { Selection } from "../model/Selection";
 
 export interface CatalogState {
-    value: Piece[],
+    value: Selection[],
     error: string | undefined,
     status: "idle" | "loading" | "error"
 }
@@ -15,10 +15,10 @@ const initialState: CatalogState = {
     status: "loading"
 }
 
-export const fetchPiecesThunk = createAsyncThunk(
-    "catalog/fetchPieces",
+export const fetchSelectionsThunk = createAsyncThunk(
+    "catalog/fetchCatalog",
     async () => {
-        const response = await fetchPieces()
+        const response = await fetchSelections()
         return response
     }
 )
@@ -28,14 +28,14 @@ export const catalogSlice = createSlice({
     initialState,
     reducers: { },
     extraReducers: (builder) => {
-        builder.addCase(fetchPiecesThunk.pending, (state) => {
+        builder.addCase(fetchSelectionsThunk.pending, (state) => {
             state.status = "loading"
         })
-        .addCase(fetchPiecesThunk.fulfilled, (state, action) => {
+        .addCase(fetchSelectionsThunk.fulfilled, (state, action) => {
             state.status = "idle"
             state.value = action.payload
         })
-        .addCase(fetchPiecesThunk.rejected, (state, action) => {
+        .addCase(fetchSelectionsThunk.rejected, (state, action) => {
             state.status = "error"
             state.error = action.error.message
         })

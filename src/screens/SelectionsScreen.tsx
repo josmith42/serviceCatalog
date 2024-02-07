@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 
 import { FlatList } from 'react-native';
-import { PieceView } from '../components/PieceView';
+import { SelectionView } from '../components/SelectionView';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchPiecesThunk, selectCatalog } from '../redux/catalogSlice';
+import { fetchSelectionsThunk, selectCatalog } from '../redux/catalogSlice';
 import { useEffect } from 'react';
 import React from 'react';
 import LoadingScreen from '../components/LoadingScreen';
@@ -12,7 +12,7 @@ import { ErrorScreen } from '../components/ErrorScreen';
 export default function SelectionsScreen() {
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch(fetchPiecesThunk())
+    dispatch(fetchSelectionsThunk())
   }, [])
   const catalog = useAppSelector(selectCatalog)
   
@@ -23,7 +23,7 @@ export default function SelectionsScreen() {
       return (<FlatList
         data={catalog.value}
         renderItem={({ item }) => (
-          <PieceView piece={item} />
+          <SelectionView selection={item} />
         )}
       />)
     case "error":

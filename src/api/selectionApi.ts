@@ -2,15 +2,15 @@ import 'react-native-url-polyfill/auto'
 import { createClient } from "@supabase/supabase-js"
 import { DATA_SOURCE, SUPABASE_KEY, SUPABASE_URL } from '../buildConstants'
 import { Platform } from 'react-native'
-import { Piece } from '../model/Piece'
+import { Selection } from '../model/Selection'
 import { Database } from './dto/supabase'
 
 const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_KEY)
 
-export async function fetchPieces(): Promise<Piece[]> {
-    console.log(`${Platform.OS} | fetchPieces() - supabase URL: ${SUPABASE_URL}`)
+export async function fetchSelections(): Promise<Selection[]> {
+    console.log(`${Platform.OS} | fetchSelections() - supabase URL: ${SUPABASE_URL}`)
     if (DATA_SOURCE == "mock") {
-        return generateFakePieces()
+        return generateFakeSelections()
     }
 
     const { data, error } = await supabase
@@ -19,16 +19,16 @@ export async function fetchPieces(): Promise<Piece[]> {
     if (error) {
         return Promise.reject(error.message)
     }
-    return data.map((piece: { id: number, title: string, composers: { name: string } | null }) => {
+    return data.map((selection: { id: number, title: string, composers: { name: string } | null }) => {
         return {
-            id: piece.id,
-            title: piece.title,
-            composer: piece.composers?.name ?? ""
+            id: selection.id,
+            title: selection.title,
+            composer: selection.composers?.name ?? ""
         }
     })
 }
 
-async function generateFakePieces(): Promise<Piece[]> {
+async function generateFakeSelections(): Promise<Selection[]> {
     // Uncomment to inject delay in loading
     // await new Promise(resolve => setTimeout(resolve, 2000))
 

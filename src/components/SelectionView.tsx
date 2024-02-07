@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
-import { Piece } from '../model/Piece';
+import { Selection } from '../model/Selection';
 
-export interface PieceViewData {
-  piece: Piece;
+export interface SelectionViewData {
+  selection: Selection;
 }
 
 const handleClick = () => {
   console.log("clicked")
 }
 
-export const PieceView = (props: PieceViewData) => {
+export const SelectionView = (props: SelectionViewData) => {
   const styles = StyleSheet.create({
     container: {
       borderRadius: 8,
@@ -21,8 +21,8 @@ export const PieceView = (props: PieceViewData) => {
 
   return (
     <List.Item style={styles.container}
-      title={props.piece.title}
-      description={props.piece.composer}
+      title={props.selection.title}
+      description={props.selection.composer}
       onPress={handleClick} />
   );
 };
