@@ -63,7 +63,7 @@ export interface Database {
         }
         Relationships: []
       }
-      pieces: {
+      selections: {
         Row: {
           book_id: number | null
           composer_id: number | null
@@ -93,14 +93,14 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "pieces_book_id_fkey"
+            foreignKeyName: "selections_book_id_fkey"
             columns: ["book_id"]
             isOneToOne: false
             referencedRelation: "books"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "pieces_composer_id_fkey"
+            foreignKeyName: "selections_composer_id_fkey"
             columns: ["composer_id"]
             isOneToOne: false
             referencedRelation: "composers"
@@ -108,45 +108,45 @@ export interface Database {
           }
         ]
       }
-      service_pieces: {
+      service_selections: {
         Row: {
           created_at: string
           genre_id: number
           id: number
-          piece_id: number
+          selection_id: number
           service_id: number
         }
         Insert: {
           created_at?: string
           genre_id: number
           id?: number
-          piece_id: number
+          selection_id: number
           service_id: number
         }
         Update: {
           created_at?: string
           genre_id?: number
           id?: number
-          piece_id?: number
+          selection_id?: number
           service_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "service_pieces_genre_id_fkey"
+            foreignKeyName: "service_selections_genre_id_fkey"
             columns: ["genre_id"]
             isOneToOne: false
             referencedRelation: "genres"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "service_pieces_piece_id_fkey"
-            columns: ["piece_id"]
+            foreignKeyName: "service_selections_selection_id_fkey"
+            columns: ["selection_id"]
             isOneToOne: false
-            referencedRelation: "pieces"
+            referencedRelation: "selections"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "service_pieces_service_id_fkey"
+            foreignKeyName: "service_selections_service_id_fkey"
             columns: ["service_id"]
             isOneToOne: false
             referencedRelation: "services"

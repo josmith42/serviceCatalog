@@ -14,7 +14,7 @@ export async function fetchSelections(): Promise<Selection[]> {
     }
 
     const { data, error } = await supabase
-        .from('pieces')
+        .from('selections')
         .select('id, title, composers!inner(name)')
     if (error) {
         return Promise.reject(error.message)
