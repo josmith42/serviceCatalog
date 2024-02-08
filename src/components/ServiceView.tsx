@@ -3,6 +3,8 @@ import { List } from 'react-native-paper';
 export interface ServiceViewData {
     date: string;
     description: string;
+    id: number;
+    onPress: (id: number) => void;
 }
 
 export const ServiceView = (props: ServiceViewData) => {
@@ -11,6 +13,6 @@ export const ServiceView = (props: ServiceViewData) => {
       title={props.date}
       description={props.description}
       descriptionNumberOfLines={0}
-      onPress={() => {console.log(`clicked ${props.date}`)}}/>
+      onPress={() => {props.onPress(props.id)}}/>
   );
 }

@@ -4,6 +4,7 @@ import { ViewStateContainer } from "./ViewState";
 import { fetchServices } from "../api/servicesApi";
 
 interface ServiceViewModel {
+    id: number
     date: string
     description: string
 }
@@ -15,6 +16,7 @@ export const fetchServicesThunk = createAsyncThunk(
     async () => {
         return (await fetchServices()).map((service) => {
             return {
+                id: service.id,
                 date: service.date,
                 description: service.selections.map(
                     (selection) => `${selection.genre}: ${selection.selection.title} - ${selection.selection.composer}`
