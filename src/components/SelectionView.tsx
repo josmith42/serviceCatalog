@@ -12,15 +12,9 @@ const handleClick = () => {
 }
 
 export const SelectionView = (props: SelectionViewData) => {
-  const styles = StyleSheet.create({
-    container: {
-      borderRadius: 8,
-      overflow: 'hidden',
-    },
-  })
 
   return (
-    <List.Item style={styles.container}
+    <List.Item
       title={props.selection.title}
       description={props.selection.composer}
       onPress={handleClick} />

@@ -32,7 +32,6 @@ export async function fetchServices(): Promise<Service[]> {
         return Promise.reject(error.message)
     }
     const services: ServiceQueryResult = data
-    console.log(services)
 
     return services.map((service: ServiceDto) => {
         return {
