@@ -2,6 +2,7 @@ import { QueryData } from "@supabase/supabase-js"
 import { DATA_SOURCE } from "../buildConstants"
 import { Service } from "../model/Service"
 import { supabaseClient } from "./supabaseClient"
+import { DateTime } from "luxon"
 
 type NoArray<T> = T extends Array<infer U> ? U : T;
 
@@ -52,7 +53,7 @@ async function fetchServiceApi(id: number | undefined = undefined): Promise<Serv
     return services.map((service: ServiceDto) => {
         return {
             id: service.id,
-            date: service.date,
+            date: DateTime.fromISO(service.date, { zone: "utc" }),
             selections: service.service_selections.map((selection: ServiceSelectionDto) => {
                 return {
                     genre: selection?.genres?.name ?? "",

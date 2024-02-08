@@ -1,15 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { ViewStateContainer } from "./ViewState";
-import { fetchServiceDetails, fetchServices } from "../api/servicesApi";
-import { Service } from "../model/Service";
+import { fetchServiceDetails } from "../api/servicesApi";
+import { DateTime } from "luxon";
 
-const initialState: ViewStateContainer<Service> = { viewState: { status: "loading" } }
+
+interface ServiceDetailsViewModel { 
+    id: number
+    date: string
+}
+
+const initialState: ViewStateContainer<ServiceDetailsViewModel> = { viewState: { status: "loading" } }
 
 export const fetchServiceDetailsThunk = createAsyncThunk(
     "catalog/fetchService",
     async (id: number) => {
-        return await fetchServiceDetails(id)
+        const details = await fetchServiceDetails(id)
+        return {
+            id: details.id,
+            date: details.date.toLocaleString(DateTime.DATE_HUGE)
+        }
     }
 )
 

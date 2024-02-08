@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { ViewStateContainer } from "./ViewState";
 import { fetchServices } from "../api/servicesApi";
+import { DateTime } from "luxon";
 
 interface ServiceViewModel {
     id: number
@@ -17,20 +18,19 @@ export const fetchServicesThunk = createAsyncThunk(
         return (await fetchServices()).map((service) => {
             return {
                 id: service.id,
-                date: service.date,
+                date: service.date.toLocaleString(DateTime.DATE_HUGE),
                 description: service.selections.map(
                     (selection) => `${selection.genre}: ${selection.selection.title} - ${selection.selection.composer}`
                 ).join("\n")
             }
         })
     }
-    
 )
 
 export const servicesSlice = createSlice({
     name: "services",
     initialState,
-    reducers: { },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchServicesThunk.pending, (state) => {
             state.viewState = { status: "loading" }
