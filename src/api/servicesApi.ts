@@ -5,11 +5,23 @@ import { supabaseClient } from "./supabaseClient"
 
 type NoArray<T> = T extends Array<infer U> ? U : T;
 
+export async function fetchServiceDetails(serviceId: number): Promise<Service> {
+    const services = await fetchServiceApi(serviceId)
+    if (services.length !== 1) {
+        return Promise.reject("Service not found")
+    }
+    return services[0]
+}
+
 export async function fetchServices(): Promise<Service[]> {
+    return fetchServiceApi()
+}
+
+async function fetchServiceApi(id: number | undefined = undefined): Promise<Service[]> {
     if (DATA_SOURCE == "mock") {
         return generateFakeServices()
     }
-    const servicesQuery = supabaseClient
+    let servicesQuery = supabaseClient
         .from('services')
         .select(
             `
@@ -22,6 +34,10 @@ export async function fetchServices(): Promise<Service[]> {
             `
         )
         .order('date', { ascending: false })
+    
+    if (id) {
+        servicesQuery = servicesQuery.eq('id', id)
+    }
 
     type ServiceQueryResult = QueryData<typeof servicesQuery>
     type ServiceDto = NoArray<ServiceQueryResult>;

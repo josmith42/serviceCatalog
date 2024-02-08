@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
 import selectionsReducer from "./selectionsSlice"
 import servicesReducer from "./servicesSlice"
+import serviceDetailsReducer from "./serviceDetailsSlice"
 
 export const store = configureStore({
   reducer: {
     selections: selectionsReducer,
     services: servicesReducer,
+    serviceDetails: serviceDetailsReducer,
   },
 })
 
