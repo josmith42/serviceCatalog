@@ -14,15 +14,25 @@ export function ServiceDetailsScreen({ route, navigation }: NativeStackScreenPro
     useEffect(() => {
         dispatch(fetchServiceDetailsThunk(serviceId))
     }, [])
+
     const serviceDetails = useAppSelector(selectServiceDetails)
+
+    useEffect(() => {
+        if (serviceDetails.viewState.status === "idle") {
+            navigation.setOptions({ title: serviceDetails.viewState.value.date })
+        }
+    }, [serviceDetails.viewState])
     return (
         <StateScreen viewState={serviceDetails.viewState} >
-            {(service) => (
-                navigation.setOptions({ title: service.date }),
-                <View>
-                    <Text>{service.date}</Text>
-                </View>
-            )}
+            {
+                (service) => {
+                    return (
+                        <View>
+                            <Text>{service.id}</Text>
+                        </View>
+                    )
+                }
+            }
         </StateScreen>
     );
 }
