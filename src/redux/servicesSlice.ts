@@ -4,7 +4,7 @@ import { ViewStateContainer } from "./ViewState";
 import { fetchServices } from "../api/servicesApi";
 import { DateTime } from "luxon";
 
-interface ServiceViewModel {
+export interface ServiceViewModel {
     id: number
     date: string
     description: string

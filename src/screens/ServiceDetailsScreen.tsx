@@ -23,8 +23,9 @@ export function ServiceDetailsScreen({ route, navigation }: NativeStackScreenPro
         }
     }, [serviceDetails.viewState])
     return (
-        <StateScreen viewState={serviceDetails.viewState} >
-            {
+        <StateScreen
+            viewState={serviceDetails.viewState}
+            onIdle={
                 (service) => {
                     return (
                         <View>
@@ -33,6 +34,6 @@ export function ServiceDetailsScreen({ route, navigation }: NativeStackScreenPro
                     )
                 }
             }
-        </StateScreen>
+        />
     );
 }

@@ -1,40 +1,39 @@
 import { FlatList } from "react-native";
 import { ServiceView } from "../components/ServiceView";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { fetchServicesThunk, selectServices } from "../redux/servicesSlice";
+import { ServiceViewModel, fetchServicesThunk, selectServices } from "../redux/servicesSlice";
 import { useEffect } from "react";
-import LoadingScreen from "../components/LoadingScreen";
-import { ErrorScreen } from "../components/ErrorScreen";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
+import { StateScreen } from "../components/StateScreen";
 
+type ServiceScreenNavProps = NativeStackNavigationProp<RootStackParamList, 'Services'>
 
-export default function ServicesScreen({ navigation }: NativeStackScreenProps<RootStackParamList, 'Services'> ) {
+export default function ServicesScreen({ navigation }: { navigation: ServiceScreenNavProps }) {
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(fetchServicesThunk())
   }, [])
-  const services = useAppSelector(selectServices)
-  switch(services.viewState.status) {
-    case "loading":
-      return (<LoadingScreen />)
-    case "idle":
-      return (<FlatList
-        data={services.viewState.value}
-        renderItem={({ item }) => (
-            <ServiceView
-              id={item.id}
-              date={item.date}
-              description={item.description}
-              onPress={(id) => {navigation.navigate('ServiceDetails', { serviceId: id })}}/>
-        )}
-      />)
-    case "error":
-      return (
-        <ErrorScreen
-          message={'There was an error fetching data from the server'}
-          details={services.viewState.message}
-        />
-      )
-  }
+  const servicesViewState = useAppSelector(selectServices)
+  return (
+    <StateScreen
+      viewState={servicesViewState.viewState}
+      onIdle={(services) => <ServicesList navigation={navigation} services={services} />}
+    />
+  )
+}
+
+function ServicesList({ navigation, services }: { navigation: ServiceScreenNavProps, services: ServiceViewModel[] }) {
+  return (
+    <FlatList
+      data={services}
+      renderItem={({ item }) => (
+        <ServiceView
+          id={item.id}
+          date={item.date}
+          description={item.description}
+          onPress={(id) => { navigation.navigate('ServiceDetails', { serviceId: id }) }} />
+      )}
+    />
+  )
 }
