@@ -20,7 +20,7 @@ export async function fetchServices(): Promise<Service[]> {
 
 async function fetchServiceApi(id: number | undefined = undefined): Promise<Service[]> {
     if (DATA_SOURCE == "mock") {
-        return generateFakeServices()
+        return generateFakeServices(id)
     }
     let servicesQuery = supabaseClient
         .from('services')
@@ -68,11 +68,11 @@ async function fetchServiceApi(id: number | undefined = undefined): Promise<Serv
     })
 }
 
-function generateFakeServices(): Promise<Service[]> {
-    return Promise.resolve([
+function generateFakeServices(id: number | undefined = undefined): Promise<Service[]> {
+    let services = [
         {
             id: 1,
-            date: "2021-01-01",
+            date: DateTime.fromISO("2021-01-01"),
             selections: [
                 { genre: "Prelude", selection: { id: 1, title: "Prelude in C Major", composer: "J.S. Bach" } },
                 { genre: "Offertory", selection: { id: 2, title: "Offertory in D Minor", composer: "J.S. Bach" } },
@@ -81,12 +81,16 @@ function generateFakeServices(): Promise<Service[]> {
         },
         {
             id: 2,
-            date: "2021-01-08",
+            date: DateTime.fromISO("2021-01-08"),
             selections: [
                 { genre: "Prelude", selection: { id: 4, title: "Prelude in C Minor", composer: "J.S. Bach" } },
                 { genre: "Offertory", selection: { id: 5, title: "Offertory in D Major", composer: "J.S. Bach" } },
                 { genre: "Postlude", selection: { id: 6, title: "Postlude in E Minor", composer: "J.S. Bach" } }
             ]
         }
-    ])
+    ]
+    if (id) {
+        services = services.filter((s) => s.id == id)
+    }
+    return Promise.resolve(services)
 }
