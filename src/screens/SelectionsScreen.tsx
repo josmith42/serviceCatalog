@@ -8,6 +8,10 @@ import { useEffect } from 'react';
 import React from 'react';
 import LoadingScreen from '../components/LoadingScreen';
 import { ErrorScreen } from '../components/ErrorScreen';
+import { Divider, Searchbar } from 'react-native-paper';
+import { View } from 'react-native';
+import { Selection } from '../model/Selection';
+import { ViewStateContainer } from '../redux/ViewState';
 
 export default function SelectionsScreen() {
   const dispatch = useAppDispatch()
@@ -15,35 +19,32 @@ export default function SelectionsScreen() {
     dispatch(fetchSelectionsThunk())
   }, [])
   const selections = useAppSelector(selectSelections)
-  
-  switch(selections.viewState.status) {
+
+  return (
+    <View>
+      <Searchbar style={{marginHorizontal:8}} value={""}/>
+      <Divider style={{marginHorizontal:4, marginTop:12 }}/>
+      <SelectionsContent selections={selections} />
+    </View>
+  )
+}
+
+function SelectionsContent({ selections }: { selections: ViewStateContainer<Selection[]> }) {
+  switch (selections.viewState.status) {
     case "loading":
-      return (<LoadingScreen />)
+      return (<LoadingScreen />);
     case "idle":
       return (<FlatList
         data={selections.viewState.value}
         renderItem={({ item }) => (
           <SelectionView selection={item} />
-        )}
-      />)
+        )} />);
     case "error":
       return (
         <ErrorScreen
           message={'There was an error fetching data from the server'}
-          details={selections.viewState.message}
-        />
-      )
+          details={selections.viewState.message} />
+      );
   }
 }
 
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});

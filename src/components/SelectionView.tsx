@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 import { Selection } from '../model/Selection';
 
