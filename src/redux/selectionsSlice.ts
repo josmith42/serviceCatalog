@@ -2,14 +2,32 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchSelections } from "../api/selectionApi";
 import { RootState } from "./store";
 import { Selection } from "../model/Selection";
-import { ViewStateContainer } from "./ViewState";
+import { ViewState } from "./ViewState";
 
-const initialState: ViewStateContainer<Selection[]> = { viewState: { status: "loading" } }
+export interface SelectionsViewState {
+    selectionsState: ViewState<Selection[]>
+    filter: string
+}
+
+const initialState: SelectionsViewState = { selectionsState: { status: "loading" }, filter: "" }
+
+export const setFilterThunk = createAsyncThunk(
+    "catalog/setFilter",
+    async (filter: string, thunkApi: any) => {
+        const setFilter = selectionsSlice.actions.setFilter
+        thunkApi.dispatch(setFilter(filter))
+        if (filter === "") {
+            thunkApi.dispatch(fetchSelectionsThunk())
+        } else {
+            thunkApi.dispatch(fetchSelectionsThunk(filter))
+        }
+    }
+)
 
 export const fetchSelectionsThunk = createAsyncThunk(
     "catalog/fetchSelections",
-    async () => {
-        const response = await fetchSelections()
+    async (filter: string | undefined) => {
+        const response = await fetchSelections(filter)
         return response
     }
 )
@@ -17,17 +35,21 @@ export const fetchSelectionsThunk = createAsyncThunk(
 export const selectionsSlice = createSlice({
     name: "selections",
     initialState,
-    reducers: { },
+    reducers: {
+        setFilter: (state, action) => {
+            state.filter = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchSelectionsThunk.pending, (state) => {
-            state.viewState = { status: "loading" }
+            state.selectionsState = { status: "loading" }
         })
-        .addCase(fetchSelectionsThunk.fulfilled, (state, action) => {
-            state.viewState = { status: "idle", value: action.payload }
-        })
-        .addCase(fetchSelectionsThunk.rejected, (state, action) => {
-            state.viewState = { status: "error", message: action.error.message ?? "" }
-        })
+            .addCase(fetchSelectionsThunk.fulfilled, (state, action) => {
+                state.selectionsState = { status: "idle", value: action.payload }
+            })
+            .addCase(fetchSelectionsThunk.rejected, (state, action) => {
+                state.selectionsState = { status: "error", message: action.error.message ?? "" }
+            })
     }
 })
 

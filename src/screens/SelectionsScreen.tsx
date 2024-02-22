@@ -1,41 +1,42 @@
-import { StyleSheet } from 'react-native';
 
 import { FlatList } from 'react-native';
 import { SelectionView } from '../components/SelectionView';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { fetchSelectionsThunk, selectSelections } from '../redux/selectionsSlice';
+import { SelectionsViewState, fetchSelectionsThunk, selectSelections, setFilterThunk } from '../redux/selectionsSlice';
 import { useEffect } from 'react';
 import React from 'react';
 import LoadingScreen from '../components/LoadingScreen';
 import { ErrorScreen } from '../components/ErrorScreen';
 import { Divider, Searchbar } from 'react-native-paper';
 import { View } from 'react-native';
-import { Selection } from '../model/Selection';
-import { ViewStateContainer } from '../redux/ViewState';
 
 export default function SelectionsScreen() {
-  const dispatch = useAppDispatch()
+
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchSelectionsThunk())
-  }, [])
-  const selections = useAppSelector(selectSelections)
+    dispatch(fetchSelectionsThunk());
+  }, []);
+  const selections = useAppSelector(selectSelections);
 
   return (
     <View>
-      <Searchbar style={{marginHorizontal:8}} value={""}/>
+      <Searchbar
+        style={{marginHorizontal:8}}
+        value={selections.filter}
+        onChangeText={text => dispatch(setFilterThunk(text))}/>
       <Divider style={{marginHorizontal:4, marginTop:12 }}/>
       <SelectionsContent selections={selections} />
     </View>
   )
 }
 
-function SelectionsContent({ selections }: { selections: ViewStateContainer<Selection[]> }) {
-  switch (selections.viewState.status) {
+function SelectionsContent({ selections }: { selections: SelectionsViewState }) {
+  switch (selections.selectionsState.status) {
     case "loading":
       return (<LoadingScreen />);
     case "idle":
       return (<FlatList
-        data={selections.viewState.value}
+        data={selections.selectionsState.value}
         renderItem={({ item }) => (
           <SelectionView selection={item} />
         )} />);
@@ -43,7 +44,7 @@ function SelectionsContent({ selections }: { selections: ViewStateContainer<Sele
       return (
         <ErrorScreen
           message={'There was an error fetching data from the server'}
-          details={selections.viewState.message} />
+          details={selections.selectionsState.message} />
       );
   }
 }

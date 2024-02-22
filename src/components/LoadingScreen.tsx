@@ -12,11 +12,7 @@ export default function LoadingScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+        padding: 32,
         alignItems: 'center',
         justifyContent: 'center'
     },
