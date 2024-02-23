@@ -24,6 +24,7 @@ export default function SelectionsScreen() {
       <Searchbar
         style={{ marginHorizontal: 8 }}
         value={selections.filter}
+        placeholder='Search selections'
         onChangeText={text => dispatch(setFilterThunk(text))} />
       <Divider style={{ marginHorizontal: 4, marginTop: 12 }} />
       <SelectionsContent selections={selections} />

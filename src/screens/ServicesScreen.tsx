@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { ServiceViewModel, fetchServicesThunk, selectServices } from "../redux/servicesSlice";
 import { useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../App";
 import { StateScreen } from "../components/StateScreen";
+import { RootStackParamList } from "../navigation/RootNavigator";
 
 type ServiceScreenNavProps = NativeStackNavigationProp<RootStackParamList, 'Services'>
 

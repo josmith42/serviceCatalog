@@ -5,6 +5,7 @@ import StackNavAppBar from "../components/StackNavAppBar"
 
 export type RootStackParamList = {
   DrawerNavigator: undefined
+  Services: undefined
   ServiceDetails: { serviceId: number }
 }
 const Stack = createNativeStackNavigator<RootStackParamList>()
