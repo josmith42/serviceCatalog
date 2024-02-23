@@ -9,6 +9,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import { ErrorScreen } from '../components/ErrorScreen';
 import { Divider, Searchbar } from 'react-native-paper';
 import { View } from 'react-native';
+import { Text } from 'react-native-paper';
 
 export default function SelectionsScreen() {
 
@@ -21,10 +22,10 @@ export default function SelectionsScreen() {
   return (
     <View>
       <Searchbar
-        style={{marginHorizontal:8}}
+        style={{ marginHorizontal: 8 }}
         value={selections.filter}
-        onChangeText={text => dispatch(setFilterThunk(text))}/>
-      <Divider style={{marginHorizontal:4, marginTop:12 }}/>
+        onChangeText={text => dispatch(setFilterThunk(text))} />
+      <Divider style={{ marginHorizontal: 4, marginTop: 12 }} />
       <SelectionsContent selections={selections} />
     </View>
   )
@@ -35,6 +36,11 @@ function SelectionsContent({ selections }: { selections: SelectionsViewState }) 
     case "loading":
       return (<LoadingScreen />);
     case "idle":
+      if (selections.selectionsState.value.length === 0) {
+        return (
+          <Text style={{ textAlign: 'center', marginTop: 16, fontStyle: 'italic' }}>No selections found</Text>
+        )
+      }
       return (<FlatList
         data={selections.selectionsState.value}
         renderItem={({ item }) => (

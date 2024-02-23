@@ -254,3 +254,22 @@ ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" GRANT ALL ON TABLES  TO "authentica
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" GRANT ALL ON TABLES  TO "service_role";
 
 RESET ALL;
+
+--
+-- Stored procedures and functions
+--
+ 
+CREATE OR REPLACE FUNCTION get_selections(filter text)
+RETURNS TABLE (id bigint, title text, composer text)
+AS $$
+BEGIN
+    RETURN QUERY SELECT selections.id, selections.title, composers.name
+    FROM selections
+    INNER JOIN composers ON composers.id = selections.composer_id
+    WHERE
+        filter = ''
+        OR filter is null
+        OR selections.title ilike filter
+        OR composers.name ilike filter;
+END; $$
+LANGUAGE 'plpgsql';

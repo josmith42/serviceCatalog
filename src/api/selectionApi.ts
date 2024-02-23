@@ -5,31 +5,21 @@ import { Selection } from '../model/Selection'
 import { supabaseClient } from './supabaseClient'
 
 export async function fetchSelections(filter: string | undefined): Promise<Selection[]> {
-    console.log(`${Platform.OS} | fetchSelections() - supabase URL: ${SUPABASE_URL}`)
+    console.log(`${Platform.OS} | fetchSelections(${filter}) - supabase URL: ${SUPABASE_URL}`)
     if (DATA_SOURCE == "mock") {
         return generateFakeSelections()
     }
 
-    let query = supabaseClient
-        .from('selections')
-        .select('id, title, composers(name)')
-    if (filter) {
-        // todo - fix this query
-        // query = query
-            // .or(`composers.name.ilike.%${filter}%`)
-            // .or(`title.ilike.%${filter}%`)
-
-        query = query.ilike("title", `%${filter}%`)
-    }
+    let query = supabaseClient.rpc('get_selections', { filter: filter ? `%${filter}%` : '' })
     const { data, error } = await query
     if (error) {
         return Promise.reject(error.message)
     }
-    return data.map((selection: { id: number, title: string, composers: { name: string } | null }) => {
+    return data.map((selection: { id: number, title: string, composer: string | null }) => {
         return {
             id: selection.id,
             title: selection.title,
-            composer: selection.composers?.name ?? ""
+            composer: selection.composer ?? ""
         }
     })
 }
