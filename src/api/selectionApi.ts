@@ -10,7 +10,7 @@ export async function fetchSelections(filter: string | undefined): Promise<Selec
         return generateFakeSelections()
     }
 
-    let query = supabaseClient.rpc('get_selections', { filter: filter ? `%${filter}%` : '' })
+    let query = supabaseClient.rpc('get_selections', { filter: filter ?? '' })
     const { data, error } = await query
     if (error) {
         return Promise.reject(error.message)

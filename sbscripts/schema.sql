@@ -269,7 +269,7 @@ BEGIN
     WHERE
         filter = ''
         OR filter is null
-        OR selections.title ilike filter
-        OR composers.name ilike filter;
+        OR selections.title ILIKE CONCAT('%', filter, '%')
+        OR composers.name ILIKE CONCAT('%', filter, '%');
 END; $$
 LANGUAGE 'plpgsql';
