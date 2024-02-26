@@ -2,7 +2,7 @@
 import { FlatList } from 'react-native';
 import { SelectionView } from '../components/SelectionView';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { SelectionsViewState, fetchSelectionsThunk, selectSelections, setFilterThunk } from '../redux/selectionsSlice';
+import { SelectionsViewState, fetchSelectionsThunk, selectSelections, setSelectionsFilterThunk } from '../redux/selectionsSlice';
 import { useEffect } from 'react';
 import React from 'react';
 import LoadingScreen from '../components/LoadingScreen';
@@ -25,7 +25,7 @@ export default function SelectionsScreen() {
         style={{ marginHorizontal: 8 }}
         value={selections.filter}
         placeholder='Search selections'
-        onChangeText={text => dispatch(setFilterThunk(text))} />
+        onChangeText={text => dispatch(setSelectionsFilterThunk(text))} />
       <Divider style={{ marginHorizontal: 4, marginTop: 12 }} />
       <SelectionsContent selections={selections} />
     </View>

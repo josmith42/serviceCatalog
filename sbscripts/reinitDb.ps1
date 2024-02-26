@@ -1,3 +1,4 @@
+#!/usr/bin/env pwsh
 
 . $PSScriptRoot/Invoke-Psql.ps1
 

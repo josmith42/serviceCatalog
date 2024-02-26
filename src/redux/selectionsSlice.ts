@@ -11,7 +11,7 @@ export interface SelectionsViewState {
 
 const initialState: SelectionsViewState = { selectionsState: { status: "loading" }, filter: "" }
 
-export const setFilterThunk = createAsyncThunk(
+export const setSelectionsFilterThunk = createAsyncThunk(
     "catalog/setFilter",
     async (filter: string, thunkApi: any) => {
         const setFilter = selectionsSlice.actions.setFilter

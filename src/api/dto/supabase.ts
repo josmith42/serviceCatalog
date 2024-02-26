@@ -177,7 +177,29 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_selections: {
+        Args: {
+          filter: string
+        }
+        Returns: {
+          id: number
+          title: string
+          composer: string
+        }[]
+      }
+      get_services: {
+        Args: {
+          filter: string
+        }
+        Returns: {
+          id: number
+          date: string
+          genre: string
+          selection_id: number
+          title: string
+          composer: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

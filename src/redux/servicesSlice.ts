@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { ViewStateContainer } from "./ViewState";
+import { ViewState, ViewStateContainer } from "./ViewState";
 import { fetchServices } from "../api/servicesApi";
 import { DateTime } from "luxon";
 
@@ -10,12 +10,30 @@ export interface ServiceViewModel {
     description: string
 }
 
-const initialState: ViewStateContainer<ServiceViewModel[]> = { viewState: { status: "loading" } }
+export interface ServicesViewState {
+    servicesState: ViewState<ServiceViewModel[]>
+    filter: string
+}
+
+const initialState: ServicesViewState = { servicesState: { status: "loading" }, filter: "" }
+
+export const setServicesFilterThunk = createAsyncThunk(
+    "services/setServicesFilter",
+    async (filter: string, thunkApi: any) => {
+        const setFilter = servicesSlice.actions.setFilter
+        thunkApi.dispatch(setFilter(filter))
+        if (filter === "") {
+            thunkApi.dispatch(fetchServicesThunk())
+        } else {
+            thunkApi.dispatch(fetchServicesThunk(filter))
+        }
+    }
+)
 
 export const fetchServicesThunk = createAsyncThunk(
     "catalog/fetchServices",
-    async () => {
-        return (await fetchServices()).map((service) => {
+    async (filter: string | undefined) => {
+        return (await fetchServices(filter)).map((service) => {
             return {
                 id: service.id,
                 date: service.date.toLocaleString(DateTime.DATE_HUGE),
@@ -30,16 +48,20 @@ export const fetchServicesThunk = createAsyncThunk(
 export const servicesSlice = createSlice({
     name: "services",
     initialState,
-    reducers: {},
+    reducers: {
+        setFilter: (state, action) => {
+            state.filter = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchServicesThunk.pending, (state) => {
-            state.viewState = { status: "loading" }
+            state.servicesState = { status: "loading" }
         })
         .addCase(fetchServicesThunk.fulfilled, (state, action) => {
-            state.viewState = { status: "idle", value: action.payload }
+            state.servicesState = { status: "idle", value: action.payload }
         })
         .addCase(fetchServicesThunk.rejected, (state, action) => {
-            state.viewState = { status: "error", message: action.error.message ?? "" }
+            state.servicesState = { status: "error", message: action.error.message ?? "" }
         })
     }
 })

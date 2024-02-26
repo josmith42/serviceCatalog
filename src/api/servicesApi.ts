@@ -1,4 +1,3 @@
-import { QueryData } from "@supabase/supabase-js"
 import { DATA_SOURCE } from "../buildConstants"
 import { Service } from "../model/Service"
 import { supabaseClient } from "./supabaseClient"
@@ -7,65 +6,62 @@ import { DateTime } from "luxon"
 type NoArray<T> = T extends Array<infer U> ? U : T;
 
 export async function fetchServiceDetails(serviceId: number): Promise<Service> {
-    const services = await fetchServiceApi(serviceId)
+    const services = await fetchServiceApi({serviceId})
     if (services.length !== 1) {
         return Promise.reject("Service not found")
     }
     return services[0]
 }
 
-export async function fetchServices(): Promise<Service[]> {
-    return fetchServiceApi()
+export async function fetchServices(filter: string | undefined): Promise<Service[]> {
+    return fetchServiceApi({filter: filter})
 }
 
-async function fetchServiceApi(id: number | undefined = undefined): Promise<Service[]> {
+async function fetchServiceApi(options: { serviceId?: number, filter?: string }): Promise<Service[]> {
+    const { serviceId, filter } = options
     if (DATA_SOURCE == "mock") {
-        return generateFakeServices(id)
+        return generateFakeServices(serviceId)
     }
     let servicesQuery = supabaseClient
-        .from('services')
-        .select(
-            `
-            id,
-            date,
-            service_selections (
-                genres!inner(name),
-                selections!inner(id, title, composers!inner(name))
-            )
-            `
-        )
-        .order('date', { ascending: false })
-    
-    if (id) {
-        servicesQuery = servicesQuery.eq('id', id)
-    }
+        .rpc('get_services', { filter: filter ?? "" })
 
-    type ServiceQueryResult = QueryData<typeof servicesQuery>
-    type ServiceDto = NoArray<ServiceQueryResult>;
-    type ServiceSelectionDto = NoArray<ServiceDto['service_selections']>;
+    if (serviceId) {
+        servicesQuery = servicesQuery.eq('id', serviceId)
+    }
 
     const { data, error } = await servicesQuery
     if (error) {
         return Promise.reject(error.message)
     }
-    const services: ServiceQueryResult = data
 
-    return services.map((service: ServiceDto) => {
-        return {
-            id: service.id,
-            date: DateTime.fromISO(service.date, { zone: "utc" }),
-            selections: service.service_selections.map((selection: ServiceSelectionDto) => {
+    type ServiceData = { id: number, date: string, genre: string, selection_id: number, title: string, composer: string }
+
+    const groupedData = data?.reduce<Map<number, ServiceData[]>>((acc, row) => {
+        if (!acc.has(row.id)) acc.set(row.id, [])
+        acc.get(row.id)?.push(row)
+        return acc
+    }, new Map())
+
+    const services: Service[] = []
+    groupedData.forEach((value, key) => {
+        if (value.length == 0) return // If this happens, something is wrong
+        services.push({
+            id: key,
+            date: DateTime.fromISO(value[0].date),
+            selections: value.map((service) => {
                 return {
-                    genre: selection?.genres?.name ?? "",
+                    genre: service.genre,
                     selection: {
-                        id: selection?.selections?.id ?? 0,
-                        title: selection?.selections?.title ?? "",
-                        composer: selection?.selections?.composers?.name ?? ""
+                        id: service.selection_id,
+                        title: service.title,
+                        composer: service.composer
                     }
                 }
             })
-        }
+        })
     })
+
+    return services
 }
 
 function generateFakeServices(id: number | undefined = undefined): Promise<Service[]> {

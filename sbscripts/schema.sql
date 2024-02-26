@@ -270,6 +270,25 @@ BEGIN
         filter = ''
         OR filter is null
         OR selections.title ILIKE CONCAT('%', filter, '%')
-        OR composers.name ILIKE CONCAT('%', filter, '%');
+        OR composers.name ILIKE CONCAT('%', filter, '%')
+        ORDER BY selections.title;
+END; $$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION get_services(filter text)
+RETURNS TABLE (id bigint, date date, genre text, title text, composer text)
+AS $$
+BEGIN
+    RETURN QUERY SELECT services.id, services.date, genres.name, selections.title, composers.name
+    FROM services
+    JOIN service_selections on service_selections.service_id = services.id
+    INNER JOIN genres on genres.id = service_selections.genre_id
+    INNER JOIN selections on selections.id = service_selections.selection_id
+    INNER JOIN composers on composers.id = selections.composer_id
+    WHERE filter is null
+    OR filter = ''
+    OR selections.title ILIKE CONCAT('%', filter, '%')
+    OR composers.name ILIKE CONCAT('%', filter, '%')
+    ORDER BY services.date desc;
 END; $$
 LANGUAGE 'plpgsql';
