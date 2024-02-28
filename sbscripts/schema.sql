@@ -270,8 +270,8 @@ BEGIN
         MAX(services.date)
     FROM selections
     INNER JOIN composers ON composers.id = selections.composer_id
-    INNER JOIN service_selections ON service_selections.selection_id = selections.id
-    INNER JOIN services ON services.id = service_selections.service_id
+    LEFT JOIN service_selections ON service_selections.selection_id = selections.id
+    LEFT JOIN services ON services.id = service_selections.service_id
     WHERE
         filter = ''
         OR filter is null
