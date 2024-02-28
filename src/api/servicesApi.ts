@@ -3,7 +3,7 @@ import { Service } from "../model/Service"
 import { supabaseClient } from "./supabaseClient"
 import { DateTime } from "luxon"
 
-type NoArray<T> = T extends Array<infer U> ? U : T;
+export type DateSortDirection = "asc" | "desc"
 
 export async function fetchServiceDetails(serviceId: number): Promise<Service> {
     const services = await fetchServiceApi({serviceId})
@@ -13,17 +13,17 @@ export async function fetchServiceDetails(serviceId: number): Promise<Service> {
     return services[0]
 }
 
-export async function fetchServices(filter: string | undefined): Promise<Service[]> {
-    return fetchServiceApi({filter: filter})
+export async function fetchServices(filter: string | undefined, sortBy: DateSortDirection): Promise<Service[]> {
+    return fetchServiceApi({filter: filter, sortBy: sortBy})
 }
 
-async function fetchServiceApi(options: { serviceId?: number, filter?: string }): Promise<Service[]> {
-    const { serviceId, filter } = options
+async function fetchServiceApi(options: { serviceId?: number, filter?: string, sortBy?: DateSortDirection }): Promise<Service[]> {
+    const { serviceId, filter, sortBy } = options
     if (DATA_SOURCE == "mock") {
         return generateFakeServices(serviceId)
     }
     let servicesQuery = supabaseClient
-        .rpc('get_services', { filter: filter ?? "" })
+        .rpc('get_services', { filter: filter ?? "", is_ascending: sortBy == "asc" })
 
     if (serviceId) {
         servicesQuery = servicesQuery.eq('id', serviceId)

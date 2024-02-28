@@ -1,5 +1,6 @@
 import { ActivityIndicator, Text } from "react-native-paper"
 import { StyleSheet, View } from 'react-native';
+import React from "react";
 
 export default function LoadingScreen() {
     return (

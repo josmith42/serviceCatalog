@@ -190,12 +190,12 @@ export interface Database {
       get_services: {
         Args: {
           filter: string
+          is_ascending: boolean
         }
         Returns: {
           id: number
           date: string
           genre: string
-          selection_id: number
           title: string
           composer: string
         }[]

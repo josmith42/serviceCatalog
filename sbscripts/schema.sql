@@ -275,7 +275,7 @@ BEGIN
 END; $$
 LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION get_services(filter text)
+CREATE OR REPLACE FUNCTION get_services(filter text, is_ascending boolean)
 RETURNS TABLE (id bigint, date date, genre text, title text, composer text)
 AS $$
 BEGIN
@@ -289,6 +289,8 @@ BEGIN
     OR filter = ''
     OR selections.title ILIKE CONCAT('%', filter, '%')
     OR composers.name ILIKE CONCAT('%', filter, '%')
-    ORDER BY services.date desc;
+    ORDER BY 
+      (CASE WHEN is_ascending = true THEN services.date END) asc,
+      (CASE WHEN is_ascending = false THEN services.date END) desc;
 END; $$
 LANGUAGE 'plpgsql';

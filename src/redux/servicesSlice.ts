@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { ViewState, ViewStateContainer } from "./ViewState";
-import { fetchServices } from "../api/servicesApi";
+import { DateSortDirection, fetchServices } from "../api/servicesApi";
 import { DateTime } from "luxon";
 
 export interface ServiceViewModel {
@@ -13,27 +13,40 @@ export interface ServiceViewModel {
 export interface ServicesViewState {
     servicesState: ViewState<ServiceViewModel[]>
     filter: string
+    isFilterMenuOpen: boolean
+    sortState: DateSortDirection
 }
 
-const initialState: ServicesViewState = { servicesState: { status: "loading" }, filter: "" }
+const initialState: ServicesViewState = {
+    servicesState: { status: "loading" },
+    filter: "",
+    isFilterMenuOpen: false,
+    sortState: "desc"
+}
 
 export const setServicesFilterThunk = createAsyncThunk(
     "services/setServicesFilter",
     async (filter: string, thunkApi: any) => {
         const setFilter = servicesSlice.actions.setFilter
         thunkApi.dispatch(setFilter(filter))
-        if (filter === "") {
-            thunkApi.dispatch(fetchServicesThunk())
-        } else {
-            thunkApi.dispatch(fetchServicesThunk(filter))
-        }
+        thunkApi.dispatch(fetchServicesThunk())
+    }
+)
+
+export const setSortByThunk = createAsyncThunk(
+    "services/setSortBy",
+    async (sortBy: DateSortDirection, thunkApi: any) => {
+        const setSortBy = servicesSlice.actions.setSortBy
+        thunkApi.dispatch(setSortBy(sortBy))
+        thunkApi.dispatch(fetchServicesThunk())
     }
 )
 
 export const fetchServicesThunk = createAsyncThunk(
     "catalog/fetchServices",
-    async (filter: string | undefined) => {
-        return (await fetchServices(filter)).map((service) => {
+    async (_, thunkApi: any) => {
+        const { filter, sortState } = thunkApi.getState().services
+        return (await fetchServices(filter, sortState)).map((service) => {
             return {
                 id: service.id,
                 date: service.date.toLocaleString(DateTime.DATE_HUGE),
@@ -51,6 +64,12 @@ export const servicesSlice = createSlice({
     reducers: {
         setFilter: (state, action) => {
             state.filter = action.payload
+        },
+        setSortModalDisplayed: (state, action) => {
+            state.isFilterMenuOpen = action.payload
+        },
+        setSortBy: (state, action) => {
+            state.sortState = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -67,5 +86,7 @@ export const servicesSlice = createSlice({
 })
 
 export const selectServices = (state: RootState) => state.services
+
+export const setSortModalDisplayed = servicesSlice.actions.setSortModalDisplayed
 
 export default servicesSlice.reducer
