@@ -75,11 +75,9 @@ export const servicesSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchServicesThunk.pending, (state) => {
             state.servicesState = { status: "loading" }
-        })
-        .addCase(fetchServicesThunk.fulfilled, (state, action) => {
+        }).addCase(fetchServicesThunk.fulfilled, (state, action) => {
             state.servicesState = { status: "idle", value: action.payload }
-        })
-        .addCase(fetchServicesThunk.rejected, (state, action) => {
+        }).addCase(fetchServicesThunk.rejected, (state, action) => {
             state.servicesState = { status: "error", message: action.error.message ?? "" }
         })
     }

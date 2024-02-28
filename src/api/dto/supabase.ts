@@ -185,6 +185,7 @@ export interface Database {
           id: number
           title: string
           composer: string
+          last_date: string
         }[]
       }
       get_services: {

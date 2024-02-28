@@ -260,18 +260,25 @@ RESET ALL;
 --
  
 CREATE OR REPLACE FUNCTION get_selections(filter text)
-RETURNS TABLE (id bigint, title text, composer text)
+RETURNS TABLE (id bigint, title text, composer text, last_date date)
 AS $$
 BEGIN
-    RETURN QUERY SELECT selections.id, selections.title, composers.name
+    RETURN QUERY SELECT
+        selections.id,
+        selections.title,
+        composers.name,
+        MAX(services.date)
     FROM selections
     INNER JOIN composers ON composers.id = selections.composer_id
+    INNER JOIN service_selections ON service_selections.selection_id = selections.id
+    INNER JOIN services ON services.id = service_selections.service_id
     WHERE
         filter = ''
         OR filter is null
         OR selections.title ILIKE CONCAT('%', filter, '%')
         OR composers.name ILIKE CONCAT('%', filter, '%')
-        ORDER BY selections.title;
+    GROUP BY selections.id, composers.name
+    ORDER BY selections.title;
 END; $$
 LANGUAGE 'plpgsql';
 

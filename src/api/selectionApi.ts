@@ -3,6 +3,7 @@ import { DATA_SOURCE, SUPABASE_URL } from '../buildConstants'
 import { Platform } from 'react-native'
 import { Selection } from '../model/Selection'
 import { supabaseClient } from './supabaseClient'
+import { DateTime } from 'luxon'
 
 export async function fetchSelections(filter: string | undefined): Promise<Selection[]> {
     console.log(`${Platform.OS} | fetchSelections(${filter}) - supabase URL: ${SUPABASE_URL}`)
@@ -15,11 +16,12 @@ export async function fetchSelections(filter: string | undefined): Promise<Selec
     if (error) {
         return Promise.reject(error.message)
     }
-    return data.map((selection: { id: number, title: string, composer: string | null }) => {
+    return data.map((selection: { id: number, title: string, composer: string | null, last_date: string | null }) => {
         return {
             id: selection.id,
             title: selection.title,
-            composer: selection.composer ?? ""
+            composer: selection.composer ?? "",
+            lastDate: selection.last_date ? DateTime.fromISO(selection.last_date) : undefined
         }
     })
 }
